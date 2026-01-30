@@ -23,6 +23,11 @@ class JwtTokenProvider(
 
 ): TokenProvider {
 
+    /** 우리 서버  SecretKey로 객체를 생성 */
+    private fun getSigningKey(): SecretKey =
+        Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharsets.UTF_8))
+
+    /** AccessToken 생성 */
     override fun createAccessToken(userId: Long, role: String): String {
         val claims = Jwts.claims()
             .subject(userId.toString())
@@ -31,6 +36,16 @@ class JwtTokenProvider(
         return createToken(claims, accessTokenExpiration)
     }
 
+    /** RefreshToken 생성 */
+    override fun createRefreshToken(userId: Long, role: String): String {
+        val claims = Jwts.claims()
+            .subject(userId.toString())
+            .add("role", role)
+            .build();
+        return createToken(claims, RefreshTokenExpiration)
+    }
+
+    /** 토큰 생성을 위한 서명키 메서드 */
     private fun createToken(claims: Claims, expiration: Long): String {
         val now = Date()
         val expiry = Date(now.time + expiration)
@@ -43,7 +58,6 @@ class JwtTokenProvider(
             .compact()
     }
 
-    private fun getSigningKey(): SecretKey =
-        Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharsets.UTF_8))
+
 
 }
