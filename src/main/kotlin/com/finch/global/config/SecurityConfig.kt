@@ -1,19 +1,23 @@
 package com.finch.global.config
 
+import com.finch.api.user.application.port.out.TokenProvider
 import com.finch.global.exception.security.LoginRequiredEntryPoint
+import com.finch.global.filter.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
     private val corsConfigurationSource: CorsConfigurationSource,
-    private val loginRequiredEntryPoint: LoginRequiredEntryPoint // 주입
+    private val loginRequiredEntryPoint: LoginRequiredEntryPoint,
+    private val tokenProvider: TokenProvider
 ) {
 
     @Bean
@@ -36,7 +40,7 @@ class SecurityConfig(
             // 요청 권한 설정
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/health").permitAll()
+                    .requestMatchers("/health", "/test-token").permitAll()
                     .anyRequest().authenticated()
             }
 
@@ -44,6 +48,12 @@ class SecurityConfig(
             .exceptionHandling { ex ->
                 ex.authenticationEntryPoint(loginRequiredEntryPoint)
             }
+
+            /** 토큰 검증 필터 */
+            .addFilterBefore(
+                JwtAuthenticationFilter(tokenProvider),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
 
         return http.build()
     }

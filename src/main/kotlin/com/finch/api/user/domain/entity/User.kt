@@ -18,8 +18,8 @@ class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @Column(nullable = false, unique = true)
-    val email: String,
+    @Column(unique = true)
+    val email: String?,
 
     @Column(nullable = false)
     var name: String,
