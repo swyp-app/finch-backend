@@ -1,5 +1,6 @@
 package com.finch.api.user.domain.entity
 
+import com.finch.api.user.infrastructure.social.kakao.dto.KakaoUserInfoDto
 import com.finch.global.common.domain.enums.Currency
 import com.finch.global.common.domain.enums.Provider
 import com.finch.global.common.domain.enums.Role
@@ -16,7 +17,7 @@ import jakarta.persistence.Table
 @Table(name = "users")
 class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: Long,
 
     @Column(unique = true)
     val email: String?,
@@ -25,7 +26,7 @@ class User(
     var name: String,
 
     @Column(name = "profile_image_url")
-    var profileImageUrl: String,
+    var profileImageUrl: String?,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -46,4 +47,24 @@ class User(
     val role: Role = Role.PENDING
 ){
 
+    fun updateSocialRefreshToken(newToken: String?) {
+        if (newToken.isNullOrBlank()) return
+        this.socialRefresh = newToken
+    }
+
+    companion object {
+        fun createKakaoUserBuilder(kakaoUser: KakaoUserInfoDto, socialRefreshToken: String): User {
+            return User(
+                id = 0L,
+                email = kakaoUser.email,
+                name = kakaoUser.name ?: "카카오 사용자",
+                profileImageUrl = kakaoUser.profileImageUrl,
+                providerId = kakaoUser.providerId,
+                provider = Provider.KAKAO,
+                socialRefresh = socialRefreshToken,
+                currency = Currency.KRW,
+                role = Role.PENDING
+            )
+        }
+    }
 }

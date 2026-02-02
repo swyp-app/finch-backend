@@ -40,7 +40,7 @@ class SecurityConfig(
             // 요청 권한 설정
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/health", "/test-token").permitAll()
+                    .requestMatchers("/health", "/user/kakao/login").permitAll()
                     .anyRequest().authenticated()
             }
 

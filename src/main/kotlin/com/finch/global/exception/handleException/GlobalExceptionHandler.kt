@@ -19,10 +19,4 @@ class GlobalExceptionHandler {
             .body(ErrorResponse.of(status, errorCode))
     }
 
-    @ExceptionHandler(Exception::class)
-    protected fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
-        return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, "생각지 못한 서버 내부 오류가 발생했습니다."))
-    }
 }
