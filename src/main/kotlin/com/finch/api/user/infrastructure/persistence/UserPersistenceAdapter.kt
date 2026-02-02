@@ -1,4 +1,4 @@
-package com.finch.api.user.infrastructure.social.persistence
+package com.finch.api.user.infrastructure.persistence
 
 import com.finch.api.user.application.port.out.UserRepository
 import com.finch.api.user.domain.entity.User

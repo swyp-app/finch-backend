@@ -7,6 +7,7 @@ import com.finch.api.user.application.port.out.UserRepository
 import com.finch.api.user.domain.entity.User
 import com.finch.api.user.domain.service.UserDomainService
 import com.finch.api.user.infrastructure.social.kakao.dto.KakaoUserInfoDto
+import com.finch.api.user.presentation.dto.request.KakaoAppAuthRequest
 import com.finch.api.user.presentation.dto.response.LoginResponse
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -26,6 +27,14 @@ class SocialLoginService(
         val kakaoUserInfo = kakaoClientSecret.getKakaoUserInfo(kakaoToken.accessToken)
 
         val user = registerOrLogin(kakaoUserInfo, kakaoToken.refreshToken)
+        return loginResponseMapper.toLoginResponse(user)
+    }
+
+    @Transactional
+    override fun kakaoAppSocialLogin(request: KakaoAppAuthRequest): LoginResponse {
+        val kakaoUserInfo = kakaoClientSecret.getKakaoUserInfo(request.accessToken)
+
+        val user = registerOrLogin(kakaoUserInfo, request.refreshToken)
         return loginResponseMapper.toLoginResponse(user)
     }
 
