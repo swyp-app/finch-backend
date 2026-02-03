@@ -7,10 +7,15 @@ open class ServiceException (
     cause: Throwable? = null
 ) : RuntimeException(errorCode.message, cause)
 
-// 구체적인 예외 상황
+/** Global (공통) */
 class ServerException : ServiceException(ErrorCode.INTERNAL_SERVER_ERROR)
 class InvalidAuthorizationException : ServiceException(ErrorCode.INVALID_AUTHORIZATION_CODE)
+
+/** 카카오 */
 class KakaoTokenIssueFailedException : ServiceException(ErrorCode.KAKAO_TOKEN_ISSUE_FAILED)
 class KakaoInvalidTokenResponseException : ServiceException(ErrorCode.KAKAO_INVALID_TOKEN_RESPONSE)
 class KakaoUserInfoRetrieveFailedException : ServiceException(ErrorCode.KAKAO_USER_INFO_RETRIEVE_FAILED)
 class KakaoInvalidUserResponseException : ServiceException(ErrorCode.KAKAO_INVALID_USER_RESPONSE)
+
+/** 애플 */
+class InvalidApplePrivateKeyException : ServiceException(ErrorCode.APPLE_INVALID_PRIVATE_KEY)

@@ -2,6 +2,7 @@ package com.finch.api.user.application.service.command
 
 import com.finch.api.user.application.mapper.LoginResponseMapper
 import com.finch.api.user.application.port.`in`.SocialLoginUseCase
+import com.finch.api.user.application.port.out.AppleClientSecret
 import com.finch.api.user.application.port.out.KakaoClientSecret
 import com.finch.api.user.application.port.out.UserRepository
 import com.finch.api.user.domain.entity.User
@@ -18,7 +19,8 @@ class SocialLoginService(
     private val kakaoClientSecret: KakaoClientSecret,
     private val userRepository: UserRepository,
     private val userDomainService: UserDomainService,
-    private val loginResponseMapper: LoginResponseMapper
+    private val loginResponseMapper: LoginResponseMapper,
+    private val appleClientSecret: AppleClientSecret
 ): SocialLoginUseCase {
 
     @Transactional
@@ -36,6 +38,10 @@ class SocialLoginService(
 
         val user = registerOrLogin(kakaoUserInfo, request.refreshToken)
         return loginResponseMapper.toLoginResponse(user)
+    }
+
+    override fun appleAppSocialLogin(code: String) {
+        val clientSecret = appleClientSecret.createAppleClientSecret();
     }
 
     private fun registerOrLogin(kakaoUser: KakaoUserInfoDto, socialRefreshToken: String): User {

@@ -11,4 +11,7 @@ interface SocialLoginUseCase {
     /** 카카오 앱 소셜 로그인 */
     fun kakaoAppSocialLogin(request: KakaoAppAuthRequest): LoginResponse
     
+    /** 애플 앱 소셜 로그인 */
+    fun appleAppSocialLogin(code: String)
+
 }
