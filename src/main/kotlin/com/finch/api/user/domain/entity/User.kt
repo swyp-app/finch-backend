@@ -1,5 +1,6 @@
 package com.finch.api.user.domain.entity
 
+import com.finch.api.user.infrastructure.social.apple.dto.AppleUserInfoDto
 import com.finch.api.user.infrastructure.social.kakao.dto.KakaoUserInfoDto
 import com.finch.global.common.domain.enums.Currency
 import com.finch.global.common.domain.enums.Provider
@@ -61,6 +62,20 @@ class User(
                 profileImageUrl = kakaoUser.profileImageUrl,
                 providerId = kakaoUser.providerId,
                 provider = Provider.KAKAO,
+                socialRefresh = socialRefreshToken,
+                currency = Currency.KRW,
+                role = Role.PENDING
+            )
+        }
+
+        fun createAppleUserBuilder(appleUser: AppleUserInfoDto, socialRefreshToken: String): User {
+            return User(
+                id = 0L,
+                email = appleUser.email ?: "",
+                name = "애플 사용자",
+                profileImageUrl = "",
+                providerId = appleUser.providerId,
+                provider = Provider.APPLE,
                 socialRefresh = socialRefreshToken,
                 currency = Currency.KRW,
                 role = Role.PENDING

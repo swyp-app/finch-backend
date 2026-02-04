@@ -33,8 +33,8 @@ class UserController(
     @PostMapping("/apple/login/app")
     fun appleAppSocialLogin(
         @RequestBody request: AuthCodeRequest
-    ) {
-        socialLoginUseCase.appleAppSocialLogin(request.code)
+    ): BaseResponse<LoginResponse> {
+        return BaseResponse.ok(socialLoginUseCase.appleAppSocialLogin(request.code))
     }
 
 }

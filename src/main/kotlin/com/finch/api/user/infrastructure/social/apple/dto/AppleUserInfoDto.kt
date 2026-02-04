@@ -1,11 +1,12 @@
 package com.finch.api.user.infrastructure.social.apple.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.finch.api.user.domain.service.SocialUserInfoDto
 
 data class AppleUserInfoDto(
-    val providerId: String,
-    val email: String?
-) {
+    override val providerId: String,
+    override val email: String?
+) : SocialUserInfoDto {
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class AppleTokenPayload(
         val sub: String,

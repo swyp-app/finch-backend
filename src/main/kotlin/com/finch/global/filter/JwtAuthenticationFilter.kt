@@ -19,7 +19,7 @@ class JwtAuthenticationFilter(
     val tokenProvider: TokenProvider
 ): OncePerRequestFilter() {
 
-    private val excludePaths = listOf("/health", "/user/kakao/login")
+    private val excludePaths = listOf("/health", "/user/kakao/login/web", "/user/kakao/login/app", "/user/apple/login/app")
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         val path = request.requestURI
