@@ -1,11 +1,13 @@
 package com.finch.api.user.infrastructure.social.kakao.dto
 
+import com.finch.api.user.domain.service.SocialUserInfoDto
+
 data class KakaoUserInfoDto(
-    val providerId: String,
-    val email: String?,
+    override val providerId: String,
+    override val email: String?,
     val name: String?,
     val profileImageUrl: String?
-){
+) : SocialUserInfoDto {
     companion object {
         fun of(
             providerId: Long,

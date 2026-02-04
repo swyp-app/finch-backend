@@ -30,4 +30,18 @@ class UserController(
         return BaseResponse.ok(socialLoginUseCase.kakaoAppSocialLogin(request))
     }
 
+    @PostMapping("/apple/login/app")
+    fun appleAppSocialLogin(
+        @RequestBody request: AuthCodeRequest
+    ): BaseResponse<LoginResponse> {
+        return BaseResponse.ok(socialLoginUseCase.appleAppSocialLogin(request.code))
+    }
+
+    @PostMapping("/apple/login/web")
+    fun appleWebSocialLogin(
+        @RequestBody request: AuthCodeRequest
+    ): BaseResponse<LoginResponse> {
+        return BaseResponse.ok(socialLoginUseCase.appleWebSocialLogin(request.code))
+    }
+
 }
