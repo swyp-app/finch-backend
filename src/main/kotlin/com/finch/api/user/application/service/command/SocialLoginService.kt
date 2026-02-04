@@ -22,7 +22,7 @@ class SocialLoginService(
     private val userDomainService: UserDomainService,
     private val loginResponseMapper: LoginResponseMapper,
     private val appleClientSecret: AppleClientSecret
-): SocialLoginUseCase {
+) : SocialLoginUseCase {
 
     @Transactional
     override fun kakaoWebSocialLogin(code: String): LoginResponse {
@@ -49,6 +49,11 @@ class SocialLoginService(
 
         val user = registerOrLogin(appleUserInfo, appleAuthToken.refreshToken, Provider.APPLE)
         return loginResponseMapper.toLoginResponse(user)
+    }
+
+    @Transactional
+    override fun appleWebSocialLogin(code: String) {
+        val clientSecret = appleClientSecret.createAppleWebClientSecret()
     }
 
     private fun registerOrLogin(

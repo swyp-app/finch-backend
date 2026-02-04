@@ -13,4 +13,7 @@ interface AppleClientSecret {
 
     /** idToken을 파싱해 사용자 정보 추출 */
     fun getAppleUserInfo(idToken: String): AppleUserInfoDto
+    
+    /** 애플 웹 버전 클라이언트 시크릿 키 생성 */
+    fun createAppleWebClientSecret(): String
 }

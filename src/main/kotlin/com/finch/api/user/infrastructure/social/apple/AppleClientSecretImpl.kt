@@ -30,6 +30,9 @@ class AppleClientSecretImpl(
     @Value("\${APPLE_KEY_ID}")
     private val keyId: String,
 
+    @Value("\${APPLE_KEY_ID}")
+    private val clientServiceId: String,
+
     @Value("\${APPLE_CLIENT_ID}")
     private val clientId: String,
 
@@ -47,19 +50,11 @@ class AppleClientSecretImpl(
     }
 
     override fun createAppleClientSecret(): String {
-        val now = Date()
-        val expiration = Date(now.time + 3600000)
+        return createAppleJwt(clientId)
+    }
 
-        return Jwts.builder()
-            .header()
-            .keyId(keyId).and()          // kid
-            .issuer(teamId)              // iss
-            .audience().add(APPLE_AUDIENCE_URL).and() // aud
-            .subject(clientId)          // sub
-            .issuedAt(now)               // iat
-            .expiration(expiration)           // exp
-            .signWith(getPrivateKey()) // 서명
-            .compact()
+    override fun createAppleWebClientSecret(): String {
+        return createAppleJwt(clientServiceId)
     }
 
     override fun getAppleAuthToken(code: String, clientSecret: String): AppleTokenResponse {
@@ -98,7 +93,26 @@ class AppleClientSecretImpl(
         )
     }
 
-    fun parsePayload(idToken: String): AppleTokenPayload {
+    private fun createAppleJwt(subjectId: String): String {
+        val now = Date()
+        val expiration = Date(now.time + 3600000)
+
+        return Jwts.builder()
+
+            .header()
+            .keyId(keyId)                // kid
+            .and()
+            .issuer(teamId)              // iss
+            .audience().add(APPLE_AUDIENCE_URL)// aud
+            .and()
+            .subject(subjectId)                // sub
+            .issuedAt(now)               // iat
+            .expiration(expiration)           // exp
+            .signWith(getPrivateKey())  // 서명
+            .compact()
+    }
+
+    private fun parsePayload(idToken: String): AppleTokenPayload {
         return runCatching {
             val chunks = idToken.split(".")
             if (chunks.size < 2) throw AppleTokenMalformedException()

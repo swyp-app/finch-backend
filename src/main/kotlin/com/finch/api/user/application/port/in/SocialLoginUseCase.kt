@@ -13,5 +13,8 @@ interface SocialLoginUseCase {
     
     /** 애플 앱 소셜 로그인 */
     fun appleAppSocialLogin(code: String): LoginResponse
+    
+    /** 애플 웹 소셜 로그인 */
+    fun appleWebSocialLogin(code: String)
 
 }
