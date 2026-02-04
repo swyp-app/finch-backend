@@ -21,3 +21,4 @@ class KakaoInvalidUserResponseException : ServiceException(ErrorCode.KAKAO_INVAL
 class InvalidApplePrivateKeyException : ServiceException(ErrorCode.APPLE_INVALID_PRIVATE_KEY)
 class AppleTokenIssueFailedException : ServiceException(ErrorCode.APPLE_TOKEN_ISSUE_FAILED)
 class AppleInvalidTokenResponseException : ServiceException(ErrorCode.APPLE_INVALID_TOKEN_RESPONSE)
+class AppleTokenMalformedException : ServiceException(ErrorCode.APPLE_TOKEN_MALFORMED)

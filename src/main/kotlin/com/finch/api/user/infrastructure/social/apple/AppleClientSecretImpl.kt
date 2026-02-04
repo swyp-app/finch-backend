@@ -1,11 +1,12 @@
 package com.finch.api.user.infrastructure.social.apple
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.finch.api.user.application.port.out.AppleClientSecret
 import com.finch.api.user.infrastructure.social.apple.dto.AppleTokenResponse
-import com.finch.global.exception.handleException.AppleInvalidTokenResponseException
-import com.finch.global.exception.handleException.AppleTokenIssueFailedException
-import com.finch.global.exception.handleException.InvalidApplePrivateKeyException
-import com.finch.global.exception.handleException.InvalidAuthorizationException
+import com.finch.api.user.infrastructure.social.apple.dto.AppleUserInfoDto
+import com.finch.api.user.infrastructure.social.apple.dto.AppleUserInfoDto.AppleTokenPayload
+import com.finch.global.exception.handleException.*
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.jsonwebtoken.Jwts
 import org.springframework.beans.factory.annotation.Value
@@ -18,8 +19,7 @@ import org.springframework.web.client.RestClient
 import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.spec.PKCS8EncodedKeySpec
-import java.util.Base64
-import java.util.Date
+import java.util.*
 
 @Component
 class AppleClientSecretImpl(
@@ -36,7 +36,8 @@ class AppleClientSecretImpl(
     @Value("\${APPLE_PRIVATE_KEY}")
     private val privateKeyP8: String,
 
-    private val restClient: RestClient = RestClient.create()
+    private val restClient: RestClient = RestClient.create(),
+    private val objectMapper: ObjectMapper
 
 ): AppleClientSecret {
 
@@ -86,6 +87,25 @@ class AppleClientSecretImpl(
 
         return responseBody?.takeIf { it.accessToken != null }
             ?: throw AppleInvalidTokenResponseException()
+    }
+
+    override fun getAppleUserInfo(idToken: String): AppleUserInfoDto {
+        val payload = parsePayload(idToken)
+
+        return AppleUserInfoDto(
+            providerId = payload.sub,
+            email = payload.email
+        )
+    }
+
+    fun parsePayload(idToken: String): AppleTokenPayload {
+        return runCatching {
+            val chunks = idToken.split(".")
+            if (chunks.size < 2) throw AppleTokenMalformedException()
+            val decoded = String(Base64.getUrlDecoder().decode(chunks[1]))
+
+            objectMapper.readValue<AppleTokenPayload>(decoded)
+        }.getOrElse { throw InvalidAuthorizationException() }
     }
 
     private fun getPrivateKey(): PrivateKey {

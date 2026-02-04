@@ -21,11 +21,11 @@ class KakaoClientSecretImpl(
     private val clientId: String,
 
     @Value("\${KAKAO_REDIRECT_URL}")
-    private val redirectUrl: String
+    private val redirectUrl: String,
+
+    private val restClient: RestClient = RestClient.create(),
 
 ): KakaoClientSecret {
-
-    private val restClient = RestClient.create()
 
     override fun getKakaoAccessToken(code: String): KakaoTokenDto {
         val params = LinkedMultiValueMap<String, String>().apply {

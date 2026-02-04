@@ -43,7 +43,7 @@ class SocialLoginService(
     override fun appleAppSocialLogin(code: String) {
         val clientSecret = appleClientSecret.createAppleClientSecret()
         val appleAuthToken = appleClientSecret.getAppleAuthToken(code, clientSecret)
-
+        val appleUserInfo = appleClientSecret.getAppleUserInfo(appleAuthToken.idToken)
     }
 
     private fun registerOrLogin(kakaoUser: KakaoUserInfoDto, socialRefreshToken: String): User {
