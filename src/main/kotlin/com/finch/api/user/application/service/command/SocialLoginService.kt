@@ -43,18 +43,17 @@ class SocialLoginService(
 
     @Transactional
     override fun appleAppSocialLogin(code: String): LoginResponse {
-        val clientSecret = appleClientSecret.createAppleClientSecret()
-        val appleAuthToken = appleClientSecret.getAppleAuthToken(code, clientSecret)
-        val appleUserInfo = appleClientSecret.getAppleUserInfo(appleAuthToken.idToken)
-
-        val user = registerOrLogin(appleUserInfo, appleAuthToken.refreshToken, Provider.APPLE)
-        return loginResponseMapper.toLoginResponse(user)
+        return appleSocialLogin(code, isWeb = false)
     }
 
     @Transactional
     override fun appleWebSocialLogin(code: String): LoginResponse {
-        val clientSecret = appleClientSecret.createAppleWebClientSecret()
-        val appleAuthToken = appleClientSecret.getAppleWebAuthToken(code, clientSecret)
+        return appleSocialLogin(code, isWeb = true)
+    }
+
+    private fun appleSocialLogin(code: String, isWeb: Boolean): LoginResponse {
+        val clientSecret = appleClientSecret.createAppleClientSecret(isWeb)
+        val appleAuthToken = appleClientSecret.getAppleAuthToken(code, clientSecret, isWeb)
         val appleUserInfo = appleClientSecret.getAppleUserInfo(appleAuthToken.idToken)
 
         val user = registerOrLogin(appleUserInfo, appleAuthToken.refreshToken, Provider.APPLE)

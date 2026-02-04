@@ -42,27 +42,21 @@ class AppleClientSecretImpl(
     private val restClient: RestClient = RestClient.create(),
     private val objectMapper: ObjectMapper
 
-): AppleClientSecret {
+) : AppleClientSecret {
 
     companion object {
         private const val APPLE_TOKEN_URL = "https://appleid.apple.com/auth/token"
         private const val APPLE_AUDIENCE_URL = "https://appleid.apple.com"
     }
 
-    override fun createAppleClientSecret(): String {
-        return createAppleJwt(clientId)
+    override fun createAppleClientSecret(isWeb: Boolean): String {
+        val subject = if (isWeb) clientServiceId else clientId
+        return createAppleJwt(subject)
     }
 
-    override fun createAppleWebClientSecret(): String {
-        return createAppleJwt(clientServiceId)
-    }
-
-    override fun getAppleAuthToken(code: String, clientSecret: String): AppleTokenResponse {
-        return requestAppleToken(clientId, code, clientSecret)
-    }
-
-    override fun getAppleWebAuthToken(code: String, clientSecret: String): AppleTokenResponse {
-        return requestAppleToken(clientServiceId, code, clientSecret)
+    override fun getAppleAuthToken(code: String, clientSecret: String, isWeb: Boolean): AppleTokenResponse {
+        val targetId = if (isWeb) clientServiceId else clientId
+        return requestAppleToken(targetId, code, clientSecret)
     }
 
     override fun getAppleUserInfo(idToken: String): AppleUserInfoDto {
@@ -79,7 +73,6 @@ class AppleClientSecretImpl(
         val expiration = Date(now.time + 3600000)
 
         return Jwts.builder()
-
             .header()
             .keyId(keyId)                // kid
             .and()
