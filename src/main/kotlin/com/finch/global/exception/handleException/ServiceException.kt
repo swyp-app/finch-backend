@@ -22,3 +22,7 @@ class InvalidApplePrivateKeyException : ServiceException(ErrorCode.APPLE_INVALID
 class AppleTokenIssueFailedException : ServiceException(ErrorCode.APPLE_TOKEN_ISSUE_FAILED)
 class AppleInvalidTokenResponseException : ServiceException(ErrorCode.APPLE_INVALID_TOKEN_RESPONSE)
 class AppleTokenMalformedException : ServiceException(ErrorCode.APPLE_TOKEN_MALFORMED)
+
+/** 구글 */
+class GoogleTokenIssueFailedException : ServiceException(ErrorCode.GOOGLE_TOKEN_ISSUE_FAILED)
+class GoogleInvalidTokenResponseException : ServiceException(ErrorCode.GOOGLE_INVALID_TOKEN_RESPONSE)

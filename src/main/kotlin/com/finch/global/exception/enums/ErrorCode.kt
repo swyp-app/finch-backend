@@ -21,4 +21,8 @@ enum class ErrorCode(
     APPLE_TOKEN_ISSUE_FAILED(502, "APPLE_TOKEN_ISSUE_FAILED", "애플 토큰 발급 서버에 문제가 발생했습니다."),
     APPLE_INVALID_TOKEN_RESPONSE(400, "APPLE_INVALID_TOKEN_RESPONSE", "애플 토큰 발급 응답이 올바르지 않습니다."),
     APPLE_TOKEN_MALFORMED(400, "APPLE_TOKEN_MALFORMED", "애플 idToken 토큰 형식이 잘못 되었습니다."),
+
+    /** Google Social Login */
+    GOOGLE_TOKEN_ISSUE_FAILED(502, "GOOGLE_TOKEN_ISSUE_FAILED", "구글 토큰 발급 서버에 문제가 발생했습니다."),
+    GOOGLE_INVALID_TOKEN_RESPONSE(400, "GOOGLE_INVALID_TOKEN_RESPONSE", "구글 토큰 발급 응답이 올바르지 않습니다."),
 }

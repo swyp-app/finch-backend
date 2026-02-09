@@ -3,6 +3,7 @@ package com.finch.api.user.application.service.command
 import com.finch.api.user.application.mapper.LoginResponseMapper
 import com.finch.api.user.application.port.`in`.SocialLoginUseCase
 import com.finch.api.user.application.port.out.AppleClientSecret
+import com.finch.api.user.application.port.out.GoogleClientSecret
 import com.finch.api.user.application.port.out.KakaoClientSecret
 import com.finch.api.user.application.port.out.UserRepository
 import com.finch.api.user.domain.entity.User
@@ -21,7 +22,8 @@ class SocialLoginService(
     private val userRepository: UserRepository,
     private val userDomainService: UserDomainService,
     private val loginResponseMapper: LoginResponseMapper,
-    private val appleClientSecret: AppleClientSecret
+    private val appleClientSecret: AppleClientSecret,
+    private val googleClientSecret: GoogleClientSecret
 ) : SocialLoginUseCase {
 
     @Transactional
@@ -49,6 +51,11 @@ class SocialLoginService(
     @Transactional
     override fun appleWebSocialLogin(code: String): LoginResponse {
         return appleSocialLogin(code, isWeb = true)
+    }
+
+    @Transactional
+    override fun googleSocialLogin(code: String) {
+        val googleAccessToken = googleClientSecret.getGoogleAccessToken(code)
     }
 
     private fun appleSocialLogin(code: String, isWeb: Boolean): LoginResponse {

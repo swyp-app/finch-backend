@@ -20,6 +20,17 @@ spring:
         use_sql_comments: true
     open-in-view: false
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: "${GOOGLE_CLIENT_ID}"
+            client-secret: "${GOOGLE_CLIENT_SECRET}"
+            redirect-uri: "${GOOGLE_REDIRECT_URL}"
+            scope: email, profile
+            authorization-grant-type: authorization_code
+
 server:
   port: 8080
 
