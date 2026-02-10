@@ -26,6 +26,12 @@ dependencies {
     // validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    // Mail
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    
+    // Thymeleaf (HTML 이메일 템플릿용)
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
     // Kotlin
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

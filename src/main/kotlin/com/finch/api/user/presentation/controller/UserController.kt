@@ -57,8 +57,8 @@ class UserController(
     @PostMapping("/signUp")
     fun signUp(
         @RequestBody request: SignUpRequest
-    ){
-        formLoginUseCase.signUp(request)
+    ): BaseResponse<String> {
+        return BaseResponse.ok(formLoginUseCase.signUp(request))
     }
 
 }
