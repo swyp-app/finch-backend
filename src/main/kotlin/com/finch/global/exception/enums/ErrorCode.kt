@@ -28,6 +28,9 @@ enum class ErrorCode(
     GOOGLE_INVALID_TOKEN_RESPONSE(400, "GOOGLE_INVALID_TOKEN_RESPONSE", "구글 토큰 발급 응답이 올바르지 않습니다."),
     GOOGLE_USER_INFO_RETRIEVE_FAILED(400, "GOOGLE_USER_INFO_RETRIEVE_FAILED", "구글 유저 정보를 불러오는데 실패했습니다."),
 
-    /** Google Social Login */
+    /** User */
     DUPLICATE_EMAIL_EXCEPTION(401, "DUPLICATE_EMAIL_EXCEPTION", "증복된 이메일입니다."),
+    USER_NOT_FOUND(404, "USER_NOT_FOUND", "존재하지 않는 사용자입니다."),
+    INVALID_PASSWORD(401, "INVALID_PASSWORD", "비밀번호가 올바르지 않습니다."),
+    LOCAL_LOGIN_ONLY(400, "LOCAL_LOGIN_ONLY", "소셜 로그인으로 가입된 계정입니다. 소셜 로그인을 이용해 주세요."),
 }

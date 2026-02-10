@@ -15,6 +15,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.springframework.security.crypto.password.PasswordEncoder
 
 @Entity
 @Table(name = "users")
@@ -56,6 +57,14 @@ class User(
     fun updateSocialRefreshToken(newToken: String?) {
         if (newToken.isNullOrBlank()) return
         this.socialRefresh = newToken
+    }
+
+    /** 폼 로그인용 비밀번호 검증 */
+    fun verifyPassword(
+        rawPassword: String,
+        passwordEncoder: PasswordEncoder
+    ): Boolean {
+        return password != null && passwordEncoder.matches(rawPassword, password)
     }
 
     companion object {

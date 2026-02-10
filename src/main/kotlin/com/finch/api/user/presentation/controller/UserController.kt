@@ -4,6 +4,7 @@ import com.finch.api.user.application.port.`in`.FormLoginUseCase
 import com.finch.api.user.application.port.`in`.SocialLoginUseCase
 import com.finch.api.user.presentation.dto.request.AuthCodeRequest
 import com.finch.api.user.presentation.dto.request.KakaoAppAuthRequest
+import com.finch.api.user.presentation.dto.request.LoginRequest
 import com.finch.api.user.presentation.dto.request.SignUpRequest
 import com.finch.api.user.presentation.dto.response.LoginResponse
 import com.finch.global.common.domain.response.BaseResponse
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth")
 class UserController(
     private val socialLoginUseCase: SocialLoginUseCase,
     private val formLoginUseCase: FormLoginUseCase
@@ -59,6 +60,13 @@ class UserController(
         @RequestBody request: SignUpRequest
     ): BaseResponse<String> {
         return BaseResponse.ok(formLoginUseCase.signUp(request))
+    }
+
+    @PostMapping("/login")
+    fun login(
+        @RequestBody request: LoginRequest
+    ): BaseResponse<LoginResponse> {
+        return BaseResponse.ok(formLoginUseCase.login(request))
     }
 
 }

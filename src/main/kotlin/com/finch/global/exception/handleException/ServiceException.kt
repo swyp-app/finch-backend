@@ -31,4 +31,7 @@ class GoogleInvalidUserResponseException : ServiceException(ErrorCode.GOOGLE_USE
 
 /** User */
 class DuplicateEmailException : ServiceException(ErrorCode.DUPLICATE_EMAIL_EXCEPTION)
+class UserNotFoundException : ServiceException(ErrorCode.USER_NOT_FOUND)
+class InvalidPasswordException : ServiceException(ErrorCode.INVALID_PASSWORD)
+class LocalLoginOnlyException : ServiceException(ErrorCode.LOCAL_LOGIN_ONLY)
 

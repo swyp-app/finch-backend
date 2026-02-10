@@ -19,7 +19,7 @@ class JwtAuthenticationFilter(
     val tokenProvider: TokenProvider
 ): OncePerRequestFilter() {
 
-    private val excludePaths = listOf("/health", "/user/kakao/login/web", "/user/kakao/login/app", "/user/apple/login/app", "/user/apple/login/web", "/user/google/login/web", "/user/signUp")
+    private val excludePaths = listOf("/health", "/auth/")
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         val path = request.requestURI
@@ -32,7 +32,7 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        log.info("================ doFilterInternal Action ================")
+        log.info { "================ doFilterInternal Action ================" }
 
         try {
             authenticateIfTokenExists(request)
@@ -49,7 +49,7 @@ class JwtAuthenticationFilter(
             setErrorResponse(response, HttpStatus.UNAUTHORIZED, e.message ?: "인증 오류가 발생했습니다.")
         } catch (e: Exception) {
             // 예상치 못한 에러 처리 (로그 남기고 500 에러 반환)
-            log.error("Unknown error in JwtAuthenticationFilter", e)
+            log.error { "Unknown error in JwtAuthenticationFilter = ${e}" }
             setErrorResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류 발생")
         }
     }
